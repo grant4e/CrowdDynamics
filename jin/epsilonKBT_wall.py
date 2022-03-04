@@ -12,26 +12,23 @@ import sys
 import os
 import math
 
+# Read in commandline args
+hoomdPath, gsdPath = [string(x) for x in input("Enter: <HOOMD path> <GSD output path>").split()] 
+runFor, dumpFreq, partPercA, partnum = [int(x) for x in input("Enter: <runFor> <dumpFreq> <partPercA> <partNum>").split()]
 
-# Read in bash arguments
-hoomdPath = "${hoomd_path}"     # path to where you installed hoomd-blue '/.../hoomd-blue/build/'
-gsdPath = "${gsd_path}"         # path to where you want to save your gsd output file
-runFor = ${runfor}              # simulation length (in tauLJ)
-dumpFreq = ${dump_freq}         # how often to dump data
-partPercA = ${part_frac_a}      # percentage of A particles
-partFracA = float(partPercA) / 100.0  # fraction of particles that are A
-peA = ${pe_a}                   # activity of A particles
-peB = ${pe_b}                   # activity of B particles
-partNum = ${part_num}           # Number of particles in system
-intPhi = ${phi}                 # system area fraction (integer, i.e. 45, 65, etc.)
+partFracA = float(partPercA) / 100.0  
+                                # fraction of particles that are A
+peA = 50                        # activity of A particles
+peB = 100                       # activity of B particles
+intPhi = 60                     # system area fraction (integer, i.e. 45, 65, etc.)
 phi = float(intPhi) / 100.0     # system area fraction (decimal, i.e. 0.45, 0.65, etc.)
-eps = ${ep}                     # epsilon (potential well depth for LJ potential)
+eps = 1.0                       # epsilon (potential well depth for LJ potential)
 
-seed1 = ${seed1}                # seed for position
-seed2 = ${seed2}                # seed for bd equilibration
-seed3 = ${seed3}                # seed for initial orientations
-seed4 = ${seed4}                # seed for A activity
-seed5 = ${seed5}                # seed for B activity
+seed1 = 1                       # seed for position
+seed2 = 2                       # seed for bd equilibration
+seed3 = 3                       # seed for initial orientations
+seed4 = 4                       # seed for A activity
+seed5 = 5                       # seed for B activity
 
 # Remaining imports
 sys.path.insert(0,hoomdPath)    # insert specified path to hoomdPath as first place to check for hoomd
