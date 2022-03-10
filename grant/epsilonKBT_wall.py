@@ -14,7 +14,7 @@ import math
 
 # Read in commandline args
 hoomdPath, gsdPath = ["nas/longleaf/home/grant4e/hoomd-v2.9.7/build", "nas/longleaf/home/grant4e/test_runs/"] 
-runFor, dumpFreq, partPercA, partnum = [1, 100, 40, 1000]
+runFor, dumpFreq, partPercA, partnum = [10, 10, 40, 1000]
 
 partFracA = float(partPercA) / 100.0  
                                 # fraction of particles that are A
