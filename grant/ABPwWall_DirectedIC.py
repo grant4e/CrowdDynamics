@@ -237,7 +237,7 @@ for i in range(0, tot_part):
         typ_val = random.rand()
         
         #Random active force orientation
-        angle = - (math.Atan2(y_loc, x_loc) - math.Atan2(0, 1))
+        angle = (math.atan2(y_loc, x_loc) - math.atan2(0, 1)) + math.pi
         
         #Zero active force in z-dimension
         f_z = 0.
