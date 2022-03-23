@@ -13,4 +13,4 @@
 
 source /nas/longleaf/home/grant4e/virtual_envs/HOOMD/bin/activate
 which python
-python -u epsilonKBT_wall.py
+python -u ABPwWall.py
