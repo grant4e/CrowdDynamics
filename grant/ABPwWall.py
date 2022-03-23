@@ -76,7 +76,7 @@ spaceBetween = sigma*1.5                            # Dist between each particle
 
 pos.append(makeGrid(topLeft, bottomRight, spaceBetween))  
 partNum = len(pos)                                  # Using this grid method means we no longer can guarantee numParticles     
-tot_part =  num_wall_part + len(pos)                # So recalculate the numbers to iterate over
+tot_part =  int(num_wall_part + len(pos))           # So recalculate the numbers to iterate over
 
 #Loop over all particles
 for i in range(0, tot_part):
