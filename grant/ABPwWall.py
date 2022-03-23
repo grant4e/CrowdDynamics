@@ -5,6 +5,7 @@ runFor, partNum = [5, 1000]
 import sys
 import os
 import math
+from myUtils import *
 
 peA = 50                        # activity of particles
 intPhi = 60                     # system area fraction (integer, i.e. 45, 65, etc.)
@@ -57,8 +58,7 @@ box_edge = np.sqrt(box_area)                        #Calculate desired box dimen
 # particles per 1 unit of distance, that will be generated in order
 # to make an impenetrable wall
 wall_part_diam = (1/5)
-num_wall_part = np.ceil(box_edge/wall_part_diam)    # Calculates number of particles in total for the wall to span the box length
-tot_part = int(partNum + num_wall_part)             # Total number of particles in simulation
+num_wall_part = np.ceil(box_edge/wall_part_diam)    # Calculates number of particles in total for the wall to span the box length            # Total number of particles in simulation
                                 
 pos = []                                            # Lists to store particle parameters
 typ = []                                            #
@@ -69,16 +69,14 @@ activity = []                                       #
 x_val = -box_edge/2                                 # starting x location of wall
 r_cut = 2**(1/6)                                    # Cut off distance of LJ potential
 
-#-------------------------------------Put Particles on a Grid--------------------------------------
+#---------------------------------------Initialize Particles---------------------------------------
 topLeft = (box_edge*0.1, box_edge*0.1)
 bottomRight = (box_edge*0.4, box_edge*0.9)
 spaceBetween = sigma*1.5                            # Dist between each particle (in x and in y) is 1.5 times diameter
-# Numpy dark magic ahead
-X, Y = np.meshgrid(np.arange(start=topLeft[0], stop=bottomRight[0], step=spaceBetween),
-                    np.arange(start=topLeft[1], stop=bottomRight[1], step=spaceBetween))
-                                                    # A grid of spaced points
-pos.append(np.vstack([X.ravel(), Y.ravel(), 0.5]))  # Turn the grid into a list of (X,Y,Z) tuples        
 
+pos.append(makeGrid(topLeft, bottomRight, spaceBetween))  
+partNum = len(pos)                                  # Using this grid method means we no longer can guarantee numParticles     
+tot_part =  num_wall_part + len(pos)                # So recalculate the numbers to iterate over
 
 #Loop over all particles
 for i in range(0, tot_part):
@@ -135,14 +133,11 @@ snap = hoomd.data.make_snapshot(N = real_tot_part,
                                                         dimensions=2),
                                 particle_types = unique_char_types)
 
-#Define and label locations and types of particles for HOOMD
 snap.particles.position[:] = pos[:]
 snap.particles.typeid[:] = typ[:]
 snap.particles.types[:] = char_types[:]
 
 system = hoomd.init.read_snapshot(snap)             #Input locations and types of particles into data step for HOOMD
-
-eps_wall=1.0                                        #Define repulsive strength of boundary walls
 
 #Define planar walls that span simulation box border (non-periodic boundary conditions)
 wallstructure=md.wall.group()
@@ -163,16 +158,11 @@ gB = hoomd.group.type(type = 'B', update=True)
 
 # Set particle potentials
 nl = hoomd.md.nlist.cell()
-r_cut = sigma * 1/3
 lj = hoomd.md.pair.lj(r_cut=2**(1/6), nlist=nl)
-# dipole = hoomd.md.pair.dipole(r_cut, nlist=nl)
 lj.set_params(mode='shift')
 
 lj.pair_coeff.set('A', 'A', epsilon=eps, sigma=1.0)
-lj.pair_coeff.set('A', 'B', epsilon=eps_wall, sigma=1.0)
-
-# USING DIPOLE FORCES FOR ALIGNMENT
-# dipole.pair_coeff.set('A', 'A', mu=0.0, A=1.0, kappa=1.0)
+lj.pair_coeff.set('A', 'B', epsilon=1.0, sigma=1.0)
 
 #---------------------------------------Brownian integration---------------------------------------
 brownEquilSteps = 10000
