@@ -13,4 +13,4 @@
 
 source /nas/longleaf/home/grant4e/virtual_envs/HOOMD/bin/activate
 which python
-python3 -u ABPwWall.py
+python3 -u ABPwWall_RandomIC.py
