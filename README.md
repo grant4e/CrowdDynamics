@@ -14,5 +14,12 @@ Some notable features of the code contained in this repository:
   <li>The ability to generate starting conditions that are randomized by simulating grid aligned particles experiencing Brownian motion</li>
   <li>The placement of wall segments made up of static particles</li>
   <li>A template for writing custom updaters/behaviours for new particle types</li>
-  
 </ul>
+
+<h2>Setup</h2>
+
+You can replicate my Conda environment with:
+
+```
+conda env create --file bio-env.txt 
+```
