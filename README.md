@@ -21,5 +21,5 @@ Some notable features of the code contained in this repository:
 You can replicate my Conda environment with:
 
 ```
-conda env create --file bio-env.txt 
+conda env create --file hoomd3-conda-env.txt 
 ```
